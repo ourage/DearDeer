@@ -57,7 +57,7 @@ PImage preparePrinterImage(String poem) {
 
 void slicePrintImage(PImage printImg) {
   ArrayList<PImage> slicedImgs = new ArrayList<PImage>();
-  int slicePositions[]={367, 480+10, 530, 570, 600, 630, 660, 690, 720, 750, 780, 810, 840, 870, 900, 930, 960, 990, 820, 850, 880, 1120, 1270, 1380};
+  int slicePositions[]={367, 530, 1040, 1270};
   int currentSlice=0, lastSlice=0;
   int i;
 
@@ -94,7 +94,6 @@ void slicePrintImage(PImage printImg) {
 }
 
 void printDeerPoem(String poem) {
-
   PImage printImg=preparePrinterImage(poem);
   slicePrintImage(printImg);
   printImg.save(String.format("Poem_%04d_%02d_%02d_%02d_%02d_%02d.png", year(), month(), day(), hour(), minute(), second()));
@@ -103,21 +102,20 @@ void printDeerPoem(String poem) {
 }
 
 void checkPrinter() {
-  if (printPhase>=0 && (millis()-lastPrintTime>500)) {
+  if (printPhase>=0 && (millis()-lastPrintTime>1)) {  //printer has it's own delay, just send it into queue
+    ByteArrayOutputStream outputBuf= new ByteArrayOutputStream(); 
     if (printPhase<slicedPrintImg.length) {
-      ByteArrayOutputStream outputBuf= new ByteArrayOutputStream(); 
       appendBuffer(outputBuf, XPrinter_ProcessImage(0, slicedPrintImg[printPhase]));
-      rawprint(printerName, outputBuf.toByteArray());
       //println(printPhase+" "+slicedPrintImg.length);
       printPhase++;
-    } else if (printPhase==slicedPrintImg.length) {
-      ByteArrayOutputStream outputBuf= new ByteArrayOutputStream(); 
+    }
+    if (printPhase==slicedPrintImg.length) {
       appendBuffer(outputBuf, XPrinter_feedRows(3));//prevent cutting content
       appendBuffer(outputBuf, XPrinter_Cut_Paper);
-      rawprint(printerName, outputBuf.toByteArray());
       //println(printPhase+" "+slicedPrintImg.length);
       printPhase=-1;
     }
+    rawprint(printerName, outputBuf.toByteArray());
     lastPrintTime=millis();
   }
 }
