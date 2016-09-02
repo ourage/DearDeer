@@ -57,7 +57,7 @@ PImage preparePrinterImage(String poem) {
 
 void slicePrintImage(PImage printImg) {
   ArrayList<PImage> slicedImgs = new ArrayList<PImage>();
-  int slicePositions[]={367, 530, 1040, 1270};
+  int slicePositions[]={367, 530, 1000, 1270};// Y location of the pause
   int currentSlice=0, lastSlice=0;
   int i;
 
