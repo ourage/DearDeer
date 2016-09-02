@@ -1,5 +1,8 @@
-void printDeerPoem(String poem) {
-  ByteArrayOutputStream outputBuf= new ByteArrayOutputStream(); 
+PImage slicedPrintImg[]=new PImage[0];
+int printPhase=-1;
+int lastPrintTime=0;
+
+PImage preparePrinterImage(String poem) {
   PGraphics pg;
   float stringWidth;
   pg = createGraphics(361, 1500);
@@ -45,13 +48,76 @@ void printDeerPoem(String poem) {
   String withus="with us";
   stringWidth = pg.textWidth(withus);
   pg.text(withus, 180-stringWidth/2, 1370);
-  
+
   pg.image(headicon, 0, 1400);
-  
+
   pg.endDraw();
-  pg.save(String.format("Poem_%04d_%02d_%02d_%02d_%02d_%02d.png", year(),month(), day(),hour(),minute(),second()));
-  appendBuffer(outputBuf, XPrinter_ProcessImage(0, pg.get()));
-  appendBuffer(outputBuf, XPrinter_feedRows(3));//prevent cutting content
-  appendBuffer(outputBuf, XPrinter_Cut_Paper);
-  rawprint(printerName, outputBuf.toByteArray());
+  return pg.get();
+}
+
+void slicePrintImage(PImage printImg) {
+  ArrayList<PImage> slicedImgs = new ArrayList<PImage>();
+  int slicePositions[]={367, 480+10, 530, 570, 600, 630, 660, 690, 720, 750, 780, 810, 840, 870, 900, 930, 960, 990, 820, 850, 880, 1120, 1270, 1380};
+  int currentSlice=0, lastSlice=0;
+  int i;
+
+  for (i=0; i<slicePositions.length; i++) {
+    if (slicePositions[i]>currentSlice) {
+      if (slicePositions[i]<printImg.height) {
+        lastSlice=currentSlice;
+        currentSlice=slicePositions[i];
+        slicedImgs.add(printImg.get(0, lastSlice, printImg.width, currentSlice-lastSlice));
+      }
+    }
+  }
+  if (currentSlice<printImg.height) {
+    lastSlice=currentSlice;
+    currentSlice=printImg.height;
+    slicedImgs.add(printImg.get(0, lastSlice, printImg.width, currentSlice-lastSlice));
+  }
+
+  slicedPrintImg=slicedImgs.toArray(new PImage[slicedImgs.size()]);
+
+  //reassemble for debug
+  int redrawSlice=0;
+  PGraphics sliceGp = createGraphics(printImg.width, printImg.height);
+  sliceGp.beginDraw();
+  sliceGp.fill(0, 25);
+  sliceGp.noStroke();
+  for (i=0; i<slicedPrintImg.length; i++) {
+    sliceGp.image(slicedPrintImg[i], 0, redrawSlice);
+    if ((i&1)==1) sliceGp.rect(0, redrawSlice, slicedPrintImg[i].width, slicedPrintImg[i].height);
+    redrawSlice+=slicedPrintImg[i].height;
+  }
+  sliceGp.endDraw();
+  sliceGp.save("sliceImg.png");
+}
+
+void printDeerPoem(String poem) {
+
+  PImage printImg=preparePrinterImage(poem);
+  slicePrintImage(printImg);
+  printImg.save(String.format("Poem_%04d_%02d_%02d_%02d_%02d_%02d.png", year(), month(), day(), hour(), minute(), second()));
+  printPhase=0;//start new print sequence
+  lastPrintTime=millis()+2000; //start print 2 seconds later
+}
+
+void checkPrinter() {
+  if (printPhase>=0 && (millis()-lastPrintTime>500)) {
+    if (printPhase<slicedPrintImg.length) {
+      ByteArrayOutputStream outputBuf= new ByteArrayOutputStream(); 
+      appendBuffer(outputBuf, XPrinter_ProcessImage(0, slicedPrintImg[printPhase]));
+      rawprint(printerName, outputBuf.toByteArray());
+      //println(printPhase+" "+slicedPrintImg.length);
+      printPhase++;
+    } else if (printPhase==slicedPrintImg.length) {
+      ByteArrayOutputStream outputBuf= new ByteArrayOutputStream(); 
+      appendBuffer(outputBuf, XPrinter_feedRows(3));//prevent cutting content
+      appendBuffer(outputBuf, XPrinter_Cut_Paper);
+      rawprint(printerName, outputBuf.toByteArray());
+      //println(printPhase+" "+slicedPrintImg.length);
+      printPhase=-1;
+    }
+    lastPrintTime=millis();
+  }
 }

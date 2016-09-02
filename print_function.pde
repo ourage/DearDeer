@@ -14,10 +14,10 @@ public String rawprint(String printerName, byte[] conte) {
   PrintService service = null;
   PrintService services[] = PrintServiceLookup.lookupPrintServices(null, null);
   for (int index = 0; service == null && index < services.length; index++) {
-    println("Printer "+index+" is "+services[index].getName());
+    //println("Printer "+index+" is "+services[index].getName());
     if (services[index].getName().equalsIgnoreCase(printerName)) {
       service = services[index];
-      println("Printer index: "+index);
+      //println("Printer index: "+index);
     }
   }
   if (service == null) {

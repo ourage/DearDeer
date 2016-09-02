@@ -72,7 +72,7 @@ void setup() {
   output_answer = createWriter(R+"-"+month() +"-"+ day() +"-"+ year()+"MyDeerDearPeom_answer.txt");
 
   headicon = loadImage("headicon.png");
-  //printDeerPoem("a\nb\nc\n");
+  //printDeerPoem("!!!!TEST!!!!  \n<<  l>>\n\nby Miss Ting and \n delights me.\n is mine.\nIt is like \nWhen I  myself.\nIt is like \nThe day  was born.\nI  as I wrote it,\nAnd clapped my hands.\nI will stop a stranger\nTo show him \nBecause it delights me\nBecause it is mine.");
 }
 void movieEvent(Movie m) {
   m.read();
@@ -157,6 +157,7 @@ void draw() {
       DeerWalk.loop();
     }
   }
+  checkPrinter();
 }
 void keyPressed() {
   // If the return key is pressed, save the String and clear it
