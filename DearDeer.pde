@@ -258,7 +258,7 @@ void keyPressed() {
         //saved=Q1+Q2+Q3+Q4+Q5+Q6;
         //output.println(saved); // Write the coordinate to the file
         //output.flush(); // Writes the remaining data to the file
-        saved="Thank you  "+Q1+'\n'+"<< "+Q2+" l>>"+'\n'+'\n'+"by Miss Ting and "+Q1+'\n'+Q1+" delights me."+'\n'+Q1+" is mine."+'\n'+"It is like "+Q3+'\n'+"When I "+Q4+" myself."+'\n'+"It is like "+Q2+'\n'+"The day "+Q5+" was born."+'\n'+"I "+Q6+" as I wrote it,"+'\n'+"And clapped my hands."+'\n'+"I will stop a stranger"+'\n'+"To show him "+Q1+'\n'+"Because it delights me"+'\n'+"Because it is mine."+'\n';
+        saved="<< "+Q2+" >>"+'\n'+"by"+Q1+'\n'+Q2+" delights me."+'\n'+Q2+" is mine."+'\n'+"It is like "+Q3+'\n'+"When I "+Q4+" myself."+'\n'+"It is like "+Q5+'\n'+"The day "+Q5+" was born."+'\n'+"I "+Q6+" as I wrote it,"+'\n'+"And clapped my hands."+'\n'+"I will stop a stranger"+'\n'+"To show him "+Q2+'\n'+"Because it delights me"+'\n'+"Because it is mine."+'\n';
         String saved_day=month() +"-"+ day() +"-"+ year() + "_" + hour() +":" + minute() + ":" + second() + "\n"+" "+Q2+"  "+'\n'+"by Dear "+Q1+'\n'+Q2+" delights me."+'\n'+Q2+" is mine."+'\n'+"It is like "+Q3+'\n'+"When I "+Q4+" myself."+'\n'+"It is like "+Q5+'\n'+"The day "+Q5+" was born."+'\n'+"I "+Q6+" as I wrote it,"+'\n'+"And clapped my hands."+'\n'+"I will stop a stranger"+'\n'+"To show him "+Q2+'\n'+"Because it delights me"+'\n'+"Because it is mine."+'\n';
 
         //String current_time = month() +"-"+ day() +"-"+ year() + "_" + hour() +":" + minute() + ":" + second();
