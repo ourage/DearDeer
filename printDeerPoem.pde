@@ -11,13 +11,13 @@ PImage preparePrinterImage(String poem) {
   pg.image(headicon, 0, 0);
   pg.fill(0);
   pg.textFont(fontPrint);
-  String title="A EVENT going to happen";
+  String title="ESI Design"; // location name
   stringWidth = pg.textWidth(title);
   pg.text(title, 180-stringWidth/2, 400);
-  String address="An address";
+  String address="111 5th ave";//address line01
   stringWidth = pg.textWidth(address);
   pg.text(address, 180-stringWidth/2, 440); // Center
-  String artistName="YuTing Feng";
+  String artistName=" 12 floor, 10003";//address line02
   stringWidth = pg.textWidth(artistName);
   pg.text(artistName, 180-stringWidth/2, 480);//artist name location
   pg.textFont(fontPrintSmall);//below are poem
@@ -49,7 +49,7 @@ PImage preparePrinterImage(String poem) {
   stringWidth = pg.textWidth(withus);
   pg.text(withus, 180-stringWidth/2, 1370);
 
-  pg.image(headicon, 0, 1400);
+  //pg.image(headicon, 0, 1400);
 
   pg.endDraw();
   return pg.get();
@@ -57,7 +57,7 @@ PImage preparePrinterImage(String poem) {
 
 void slicePrintImage(PImage printImg) {
   ArrayList<PImage> slicedImgs = new ArrayList<PImage>();
-  int slicePositions[]={367, 530, 1000, 1270};// Y location of the pause
+  int slicePositions[]={200, 530, 800, 1000, 1270};// Y location of the pause
   int currentSlice=0, lastSlice=0;
   int i;
 
@@ -110,8 +110,11 @@ void checkPrinter() {
       printPhase++;
     }
     if (printPhase==slicedPrintImg.length) {
-      appendBuffer(outputBuf, XPrinter_feedRows(3));//prevent cutting content
+      appendBuffer(outputBuf, XPrinter_feedRows(10));//prevent cutting content
       appendBuffer(outputBuf, XPrinter_Cut_Paper);
+      appendBuffer(outputBuf, XPrinter_feedRows(50));//feed after cut
+      appendBuffer(outputBuf, XPrinter_feedRows(30));
+      //appendBuffer(outputBuf, XPrinter_feedRows(50));
       //println(printPhase+" "+slicedPrintImg.length);
       printPhase=-1;
     }
