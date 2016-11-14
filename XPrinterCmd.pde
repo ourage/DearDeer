@@ -78,4 +78,3 @@ void appendBuffer(ByteArrayOutputStream buf, byte[] arr) {
 void appendBuffer(ByteArrayOutputStream buf, String str) {
   appendBuffer(buf, str.getBytes());
 }
-
